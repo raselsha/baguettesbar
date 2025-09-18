@@ -74,9 +74,9 @@ header{
     width:48%;
     position: relative;
     height: 100px;
-    background: #582b28;
+    background: #fff;
     box-shadow: 3px 3px 6px rgba(99, 49, 45, 0.4);
-    color: #fff;
+    color: #582b28;
 }
 
 .item-info {
@@ -120,7 +120,7 @@ header{
     /*! background: green; */
     border-radius: 8px;
     font-style: italic;
-    font-size: 1.1em;
+    font-size: 2.1em;
     text-align: center;
 }
 
@@ -155,7 +155,7 @@ header{
 }
 
 .special-info{
-    width: 790px;
+    /*! width: 790px; */
     margin: auto;
 }
    
