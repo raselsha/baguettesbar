@@ -1,0 +1,159 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #b2daa5ff;
+    font-family: 'Roboto', "Lato", sans-serif, serif;
+    color: #63312dff;
+    line-height: 1.6;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo{
+    width: 200px;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 40px;
+    padding-top: 5px;
+}
+
+.menu-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: auto;
+    
+}
+
+.menu-title {
+    font-family: 'Roboto Slab';
+    text-align: center;
+    font-size: 3.5em;
+    font-weight: 900;
+    margin-bottom: 30px;
+    text-shadow: 3px 3px 6px rgba(99, 49, 45, 0.4);
+    letter-spacing: 4px;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px;
+    border-radius: 8px;
+    transform: translateY(-2px);
+    /*! border: 1px dotted #63312d; */
+    width:32%;
+    position: relative;
+    height: 150px;
+    background: #ffffff5e;
+}
+.left,.right{
+    width:100%;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-name {
+    font-size:40px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1;
+    font-family: roboto;
+}
+
+.vegetarian-badge,.halal-badge {
+    background-color: green;
+    color: #FFD700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7em;
+    font-weight: 500;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.item-description {
+    font-size: 28px;
+    color: rgba(99, 49, 45, 0.89);
+    line-height: 1.2;
+}
+
+.item-description .extra-note{
+    color: green;
+}
+.item-price {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #63312dff;
+    min-width: 80px;
+    text-align: right;
+}
+
+.note {
+    margin: 25px 0;
+    padding: 15px;
+    color: white;
+    background: green;
+    border-radius: 8px;
+    font-style: italic;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.meal-deal {
+    margin-top:20px;
+    padding: 15px;
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+    border: 3px solid #D2691E;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+}
+
+.meal-deal-title {
+    font-size: 1.8em;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.meal-deal-description {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.signature-item {
+    border: 2px solid #63312dff;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.special-info{
+    width: 1000px;
+    margin: auto;
+}
+        
