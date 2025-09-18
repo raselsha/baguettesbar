@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baguette Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="paterrn">
+        <header>
+            <img class="logo" src="logo.svg" alt="">
+            <h1 class="menu-title">BAGUETTES £3</h1>
+            <img class="logo" src="baguettes.svg" alt="">
+        </header>
+        <div class="menu-container">
+            
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">1. Classic Chicken</div>
+                        <!-- <div class="item-description">Boiled chicken and Mayo</div> -->
+                    </div>
+                    <!-- <div class="item-price">£3.00</div> -->
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">2.  Spicy Chicken Tikka</div>
+                        <!-- <div class="item-description">Chicken tikka and spicy mayo</div> -->
+                    </div>
+                    <!-- <div class="item-price">£3.00</div> -->
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">3.  Spicy Beef</div>
+                        <!-- <div class="item-description">Spicy beef and spicy mayo</div> -->
+                    </div>
+                    <!-- <div class="item-price">£3.00</div> -->
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">4. Halal Salami</div>
+                        <!-- <div class="item-description">Mayo and salami</div> -->
+                    </div>
+                    <span class="halal-badge ribbon">HALAL</span>
+                    <!-- <div class="item-price">£3.00</div> -->
+                </div>
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">5. Egg Mayo</div>
+                        <!-- <div class="item-description">Egg, mayo, and black pepper</div> -->
+                    </div>
+                    <!-- <div class="item-price">£3.00</div> -->
+                </div>
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">6. Cheese Delight</div>
+                        <!-- <div class="item-description">Cheese, pickle, and Mayo </div> -->
+                        <!-- <span class="extra-note">Vegan mayo and cheese for vegetarian/vegan</span> -->
+                    </div>
+                    <span class="vegetarian-badge ">V</span>
+                    <!-- <div class="item-price">£3.00</div> -->
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">7. Tuna Mayo</div>
+                        <!-- <div class="item-description">Tuna, mayo, and black pepper</div> -->
+                    </div>
+                    <!-- <div class="item-price">£3.00</div> -->
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">8. Piri Piri Chicken</div>
+                        <!-- <div class="item-description">Boiled chicken and piri piri sauce</div> -->
+                    </div>
+                    <span class="halal-badge ribbon">HALAL</span>
+                    <!-- <div class="item-price">£3.00</div> -->
+                </div>
+
+                <div class="menu-item">
+                    <div class="item-info">
+                        <div class="item-name">9. BBQ Chicken</div>
+                        <!-- <div class="item-description">Boiled chicken and special homemade sauce</div> -->
+                    </div>
+                    <span class="halal-badge ribbon">HALAL</span>
+                    <!-- <div class="item-price">£3.00</div> -->
+                </div>
+                
+            
+        </div>
+        <div class="special-info">
+            <h3 class="note">
+                **All cold baguettes served with lettuce and various sauces.
+            </h3>
+        </div>
+        <!-- <div class="special-info">
+            <div class="meal-deal">
+                <div class="meal-deal-title">Meal Deal</div>
+                <div class="meal-deal-description">
+                    Any baguette + cold drink + fresh fruit/crisps = £4.50
+                </div>
+            </div>
+        </div> -->
+        </div>
+    </div>
+     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+        function downloadImage() {
+            const orderSummary = document.getElementById('container');
+            const prevOverflow = orderSummary.style.overflow;
+            const prevHeight   = orderSummary.style.height;
+            orderSummary.style.overflow = "visible";
+            orderSummary.style.height   = "auto";
+            html2canvas(orderSummary, {
+                backgroundColor: '#fff',
+                useCORS: true,
+                width: orderSummary.scrollWidth,
+                height: orderSummary.scrollHeight + 40,
+                windowWidth: orderSummary.scrollWidth + 40,
+                windowHeight: orderSummary.scrollHeight + 40,
+                onclone: (clonedDoc) => {
+                    const clonedSummary = clonedDoc.getElementById('container');
+                    if (clonedSummary) {
+                        clonedSummary.style.padding = "20px";
+                        clonedSummary.style.boxSizing = "border-box";
+                    }
+                }
+            }).then(canvas => {
+                orderSummary.style.overflow = prevOverflow;
+                orderSummary.style.height   = prevHeight;
+                const link = document.createElement('a');
+                link.download = 'order-summary.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+        // downloadImage();
+    </script>
+</body>
+</html>
