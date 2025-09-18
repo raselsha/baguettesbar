@@ -80,8 +80,9 @@ header{
     width:48%;
     position: relative;
     height: 100px;
-    background: #63312d;
+    background: #fff;
     box-shadow: 3px 3px 6px rgba(99, 49, 45, 0.4);
+    color: #63312d;
 }
 
 .item-info {
