@@ -43,15 +43,21 @@ header{
 
 .menu-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    align-items: start;
+    align-items: center;
     flex-wrap: wrap;
     gap: 30px;
     margin: auto;
     
 }
-
+.menu-plus{
+    font-size: 5.5em;
+    line-height: .5;
+    font-weight: bold;
+    text-shadow: 3px 3px 6px rgba(99, 49, 45, 0.4);
+    color: #63312d;
+}
 .menu-title {
     font-family: 'Roboto Slab';
     text-align: center;
@@ -65,7 +71,7 @@ header{
 
 .menu-item {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 10px;
     border-radius: 8px;
@@ -91,6 +97,8 @@ header{
     gap: 10px;
     line-height: 1;
     text-transform: uppercase;
+    text-align: center;
+    justify-content: center;
 }
 
 .item-description {
