@@ -74,9 +74,9 @@ header{
     width:48%;
     position: relative;
     height: 100px;
-    background: #fff;
+    background: #582b28;
     box-shadow: 3px 3px 6px rgba(99, 49, 45, 0.4);
-    color: #63312d;
+    color: #fff;
 }
 
 .item-info {
