@@ -17,7 +17,7 @@ header{
     justify-content: space-evenly;
     align-items: center;
     flex-direction: row;
-    margin-bottom: 40px;
+    /*! margin-bottom: 40px; */
 }
 
 .logo{
@@ -43,9 +43,9 @@ header{
 
 .menu-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    align-items: start;
+    align-items: center;
     flex-wrap: wrap;
     gap: 30px;
     margin: auto;
@@ -71,7 +71,7 @@ header{
     border-radius: 8px;
     transform: translateY(-2px);
     border: 2px solid #fff;
-    width:48%;
+    width:77%;
     position: relative;
     height: 100px;
     background: #fff;
