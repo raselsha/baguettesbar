@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breakfast Order Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <form class="form-content" id="breakfastForm">
+            <div class="menu-section">
+                <h3 class="section-title">Breakfast Menu</h3>
+                <div class="user-list">
+                    <span class="user-label">Select User:</span>
+                    <select id="userSelect"></select>
+                    <span id="userBalance" class="user-balance"></span>
+                </div>
+                <div id="menuItems" class="menuItems"></div>
+            </div>
+        </form>
+        <!-- summery -->
+        <div class="mini-cart">
+            <div class="order-summary" id="orderSummary" >
+                <h3 class="section-title">Customer Order</h3>
+                <div id="summaryItems" class="summaryItems"></div>
+                <div class="total-amount" id="totalAmount">Total Items: 0</div>
+                <button type="button" class="submit-btn totalAmount" onclick="downloadSummaryImage()">Download Summary as Image</button>
+            </div>
+            <div class="order-summary" id="fullSummary">
+                <h3 class="section-title">All Orders Summary</h3>
+                <div id="fullSummaryItems" class="summaryItems"></div>
+                <div class="total-amount" id="fullTotalAmount">Total: ৳0</div>
+                <button type="button" class="submit-btn fullTotalAmount" onclick="downloadFullSummaryImage()">Generate Orders</button>
+            </div>
+            <button id="toggleCartBtn" class="toggle-cart-btn">❮</button>
+        </div>
+        
+    </div>
+    
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+    function downloadSummaryImage() {
+        const orderSummary = document.getElementById('summaryItems');
+        const prevOverflow = orderSummary.style.overflow;
+        const prevHeight   = orderSummary.style.height;
+        orderSummary.style.overflow = "visible";
+        orderSummary.style.height   = "auto";
+        html2canvas(orderSummary, {
+            backgroundColor: '#fff',
+            useCORS: true,
+            width: orderSummary.scrollWidth,
+            height: orderSummary.scrollHeight + 40,
+            windowWidth: orderSummary.scrollWidth + 40,
+            windowHeight: orderSummary.scrollHeight + 40,
+            onclone: (clonedDoc) => {
+                const clonedSummary = clonedDoc.getElementById('summaryItems');
+                if (clonedSummary) {
+                    clonedSummary.style.padding = "20px";
+                    clonedSummary.style.boxSizing = "border-box";
+                }
+            }
+        }).then(canvas => {
+            orderSummary.style.overflow = prevOverflow;
+            orderSummary.style.height   = prevHeight;
+            const link = document.createElement('a');
+            link.download = 'customer-order-summary.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+    function downloadFullSummaryImage() {
+        const orderSummary = document.getElementById('fullSummaryItems');
+        const prevOverflow = orderSummary.style.overflow;
+        const prevHeight   = orderSummary.style.height;
+        orderSummary.style.overflow = "visible";
+        orderSummary.style.height   = "auto";
+        html2canvas(orderSummary, {
+            backgroundColor: '#fff',
+            useCORS: true,
+            width: orderSummary.scrollWidth,
+            height: orderSummary.scrollHeight + 40,
+            windowWidth: orderSummary.scrollWidth + 40,
+            windowHeight: orderSummary.scrollHeight + 40,
+            onclone: (clonedDoc) => {
+                const clonedSummary = clonedDoc.getElementById('fullSummaryItems');
+                if (clonedSummary) {
+                    clonedSummary.style.padding = "20px";
+                    clonedSummary.style.boxSizing = "border-box";
+                }
+            }
+        }).then(canvas => {
+            orderSummary.style.overflow = prevOverflow;
+            orderSummary.style.height   = prevHeight;
+            const link = document.createElement('a');
+            link.download = 'order-summary.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
+    </script>
+    <script>
+        // --- User Management ---
+        let users = ['Boss','Mahin',"Sumon","Azad","Shahadat","Asif","Suvo","Rabiul","Shahnur"];
+        let userBalances = {
+            'Boss': 30,
+            'Mahin': 30,
+            'Sumon': 30,
+            'Azad': 30,
+            'Shahadat': 30,
+            'Asif': 30,
+            'Suvo': 30,
+            'Rabiul': 30,
+            'Shahnur': 30
+        };
+        let currentUser = users[0];
+        let userOrders = {}; // { username: {itemId: quantity, ...}, ... }
+
+        function renderUserSelect() {
+            const userSelect = document.getElementById('userSelect');
+            userSelect.innerHTML = '';
+            users.forEach(user => {
+                const opt = document.createElement('option');
+                opt.value = user;
+                opt.textContent = user;
+                userSelect.appendChild(opt);
+            });
+            userSelect.value = currentUser;
+            updateUserBalance();
+        }
+
+        function updateUserBalance() {
+            const balanceSpan = document.getElementById('userBalance');
+            let order = userOrders[currentUser] || {};
+            let total = 0;
+            Object.keys(order).forEach(itemId => {
+                const item = menuItemsData.find(i => i.id == itemId);
+                if (item) total += order[itemId] * item.price;
+            });
+            let balance = userBalances[currentUser] - total;
+            balanceSpan.textContent = `Balance: ৳${balance}`;
+            balanceSpan.className = 'user-balance' + (balance < 0 ? ' balance-negative' : '');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUserSelect();
+            document.getElementById('userSelect').addEventListener('change', function() {
+                currentUser = this.value;
+                loadUserOrder();
+                updateUserBalance();
+            });
+        });
+
+        // --- Menu and Order Logic ---
+        const menuItemsData = [
+            { id: 1, name: 'পরোটা', price: 20 },
+            { id: 2, name: 'পরোটা তেল ছাড়া', price: 20 },
+            { id: 3, name: 'ডিম পোচ', price: 25 },
+            { id: 4, name: 'ডিম ভাজি', price: 25 },
+            { id: 5, name: 'শুধু খিচুড়ি', price: 50 },
+            { id: 6, name: 'ডিম খিচুড়ি', price: 75 },
+            { id: 7, name: 'রুমালি রুটি', price: 20 },
+            { id: 8, name: 'তন্দুরি রুটি', price: 20 },
+            { id: 9, name: 'স্যুপ', price: 100 },
+            { id: 10, name: 'নেহারি', price: 220 },
+            { id: 11, name: 'সবজি', price: 25 },
+            { id: 12, name: 'ডাল', price: 25 },
+            { id: 13, name: 'ডাল সবজি', price: 25 },
+            { id: 14, name: 'দই', price: 30 },
+            { id: 15, name: 'মিষ্টি', price: 50 },
+            { id: 16, name: 'কলা', price: 10 },
+            { id: 17, name: 'মুগ ডাল', price: 30 },
+            { id: 18, name: 'কাঁচা ডিম', price: 12 },
+            { id: 19, name: 'সিঙ্গারা', price: 20 },
+            { id: 20, name: 'সমুচা', price: 20 },
+            { id: 21, name: 'গিলা কলিজা', price: 40 },
+            { id: 22, name: 'টক দই', price: 100 }
+        ];
+
+        function toggleCheckbox(id) {
+            const checkbox = document.getElementById(`item${id}`);
+            checkbox.checked = !checkbox.checked;
+            checkbox.dispatchEvent(new Event('change'));
+            if (checkbox.checked) {
+                checkbox.closest('.menu-item').classList.add("selected");
+            } else {
+                checkbox.closest('.menu-item').classList.remove("selected");
+            }
+        }
+
+        function renderMenu() {
+            const menuDiv = document.getElementById('menuItems');
+            menuDiv.innerHTML = '';
+            menuItemsData.forEach(item => {
+                menuDiv.innerHTML += `
+                <div class="menu-item" >
+                    <div class="item-left" onclick="toggleCheckbox(${item.id})">
+                        <span>
+                            <input type="checkbox" id="item${item.id}" onchange="toggleQuantity(${item.id})">
+                            <label for="item${item.id}" class="item-name">${item.name} </label>
+                        </span>
+                        <h2 class="item-price">৳${item.price}</h2>
+                    </div>
+                    
+                    <div class="quantity-input" id="qty${item.id}">
+                        <button type="button" class="qty-btn" onclick="decreaseQty(${item.id})">−</button>
+                        <input type="number" id="input${item.id}" value="1" min="1" max="50" readonly>
+                        <button type="button" class="qty-btn" onclick="increaseQty(${item.id})">+</button>
+                    </div>
+                </div>
+                `;
+            });
+        }
+
+        function toggleQuantity(itemId) {
+            const checkbox = document.getElementById(`item${itemId}`);
+            const qtyDiv = document.getElementById(`qty${itemId}`);
+            if (checkbox.checked) {
+                qtyDiv.classList.add('active');
+                saveUserOrder(itemId, parseInt(document.getElementById(`input${itemId}`).value));
+            } else {
+                qtyDiv.classList.remove('active');
+                saveUserOrder(itemId, 0);
+            }
+            updateOrderSummary();
+            updateUserBalance();
+        }
+
+        function increaseQty(itemId) {
+            const input = document.getElementById(`input${itemId}`);
+            const currentValue = parseInt(input.value);
+            if (currentValue < 50) {
+                input.value = currentValue + 1;
+                saveUserOrder(itemId, currentValue + 1);
+                updateOrderSummary();
+                updateUserBalance();
+            }
+        }
+
+        function decreaseQty(itemId) {
+            const input = document.getElementById(`input${itemId}`);
+            const currentValue = parseInt(input.value);
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+                saveUserOrder(itemId, currentValue - 1);
+                updateOrderSummary();
+                updateUserBalance();
+            }
+        }
+
+        function saveUserOrder(itemId, qty) {
+            if (!userOrders[currentUser]) userOrders[currentUser] = {};
+            if (qty > 0) {
+                userOrders[currentUser][itemId] = qty;
+            } else {
+                delete userOrders[currentUser][itemId];
+            }
+        }
+
+        function loadUserOrder() {
+            // Uncheck all
+            menuItemsData.forEach(item => {
+                document.getElementById(`item${item.id}`).checked = false;
+                document.getElementById(`qty${item.id}`).classList.remove('active');
+                document.getElementById(`input${item.id}`).value = 1;
+                document.getElementById(`item${item.id}`).closest('.menu-item').classList.remove("selected");
+            });
+            // Load for current user
+            const order = userOrders[currentUser] || {};
+            Object.keys(order).forEach(itemId => {
+                const id = parseInt(itemId);
+                document.getElementById(`item${id}`).checked = true;
+                document.getElementById(`qty${id}`).classList.add('active');
+                document.getElementById(`input${id}`).value = order[itemId];
+                document.getElementById(`item${id}`).closest('.menu-item').classList.add("selected");
+            });
+            updateOrderSummary();
+            updateUserBalance();
+        }
+
+        function updateOrderSummary() {
+            const summaryDiv = document.getElementById('summaryItems');
+            const orderSummaryDiv = document.getElementById('orderSummary');
+            const totalAmountDiv = document.getElementById('totalAmount');
+            let summaryHtml = '';
+            let totalItems = 0;
+            let totalPrice = 0;
+            let hasSelectedItems = false;
+
+            users.forEach(user => {
+                const order = userOrders[user] || {};
+                const items = Object.keys(order);
+                if (items.length > 0) {
+                    hasSelectedItems = true;
+                    
+                     // Show balance after order for each user
+                    let userBalance = userBalances[user] - items.reduce((sum, itemId) => {
+                        const item = menuItemsData.find(i => i.id == itemId);
+                        return sum + (order[itemId] * item.price);
+                    }, 0);
+                    summaryHtml += `<div class="summary-user">${user}:<span class="user-balance${userBalance < 0 ? ' balance-negative' : ''}"> ৳${userBalance}</span></div>`;
+                    
+                    items.forEach(itemId => {
+                        const item = menuItemsData.find(i => i.id == itemId);
+                        const quantity = order[itemId];
+                        totalItems += quantity;
+                        totalPrice += quantity * item.price;
+                        summaryHtml += `
+                            <div class="summary-item">
+                                <span>${item.name}</span>
+                                <span>× ${quantity} = ৳${quantity * item.price}</span>
+                            </div>
+                        `;
+                    });
+                   
+                }
+            });
+            const miniCart = document.querySelector('.mini-cart');
+
+            if (hasSelectedItems) {
+                miniCart.classList.add('active');
+                miniCart.classList.remove('inactive');
+                summaryDiv.innerHTML = summaryHtml;
+                totalAmountDiv.textContent = `Total Items: ${totalItems} | মোট: ৳${totalPrice}`;
+            } else {
+                miniCart.classList.remove('active');
+                miniCart.classList.add('inactive');
+            }
+
+            updateFullSummary();
+
+        }
+
+        const miniCart = document.querySelector('.mini-cart');
+        const toggleBtn = document.getElementById('toggleCartBtn');
+
+        toggleBtn.addEventListener('click', () => {
+            miniCart.classList.toggle('active');
+            miniCart.classList.toggle('inactive');
+        });
+
+        window.toggleQuantity = toggleQuantity;
+        window.increaseQty = increaseQty;
+        window.decreaseQty = decreaseQty;
+
+        renderMenu();
+        // Initialize userOrders for all users
+        users.forEach(u => userOrders[u] = {});
+
+        document.getElementById('menuItems').addEventListener('change', updateOrderSummary);
+
+        document.getElementById('breakfastForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            updateOrderSummary();
+            alert('Order placed! (Implement your own logic here)');
+        });
+
+        // Load first user's order on page load
+        loadUserOrder();
+        function updateFullSummary() {
+            const fullSummaryDiv = document.getElementById('fullSummaryItems');
+            const fullSummaryWrapper = document.getElementById('fullSummary');
+            const fullTotalDiv = document.getElementById('fullTotalAmount');
+
+            let consolidatedOrders = {}; // { itemId: totalQty }
+            let totalPrice = 0;
+            let totalItems = 0;
+            // Collect all orders across all users
+            users.forEach(user => {
+                const order = userOrders[user] || {};
+                Object.keys(order).forEach(itemId => {
+                    if (!consolidatedOrders[itemId]) consolidatedOrders[itemId] = 0;
+                    consolidatedOrders[itemId] += order[itemId];
+                    
+                });
+            });
+
+            // Build summary HTML
+            let summaryHtml = '';
+            Object.keys(consolidatedOrders).forEach(itemId => {
+                const item = menuItemsData.find(i => i.id == itemId);
+                const qty = consolidatedOrders[itemId];
+                const price = qty * item.price;
+                totalPrice += price;
+                totalItems = itemId;
+                
+                summaryHtml += `
+                    <div class="summary-item">
+                        <span>${item.name} × ${qty}</span>
+                        <span>৳${price}</span>
+                    </div>
+                `;
+            });
+
+            if (Object.keys(consolidatedOrders).length > 0) {
+                fullSummaryDiv.innerHTML = summaryHtml;
+                fullTotalDiv.textContent = `Total Items: ${totalItems} | মোট: ৳${totalPrice}`;
+            } else {
+            }
+        }
+
+    </script>
+</body>
+</html>
